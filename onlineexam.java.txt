@@ -1,0 +1,100 @@
+import java.util.Scanner;
+
+public class OnlineExamSystem {
+    private static Scanner scanner = new Scanner(System.in);
+    private static ExamSystem examSystem = new ExamSystem();
+    private static User currentUser;
+
+    public static void main(String[] args) {
+        // Prompt for user login
+        System.out.println("Welcome to the Online Exam System!");
+        login();
+
+        // After successful login, display menu and process user selection
+        if (currentUser != null) {
+            int choice;
+            do {
+                displayMenu();
+                choice = scanner.nextInt();
+                scanner.nextLine(); // Consume the newline character
+
+                switch (choice) {
+                    case 1:
+                        updateProfile();
+                        break;
+                    case 2:
+                        updatePassword();
+                        break;
+                    case 3:
+                        startExam();
+                        break;
+                    case 4:
+                        closeSession();
+                        break;
+                    case 5:
+                        System.out.println("Logging out...");
+                        currentUser = null;
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } while (choice != 5);
+        } else {
+            System.out.println("Login failed. Exiting...");
+        }
+    }
+
+    private static void login() {
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        currentUser = examSystem.authenticateUser(username, password);
+        if (currentUser != null) {
+            System.out.println("Login successful!");
+        } else {
+            System.out.println("Login failed. Please try again.");
+            login(); // Retry login recursively
+        }
+    }
+
+    private static void updateProfile() {
+        // Implementation for updating user profile
+        System.out.println("Updating user profile...");
+    }
+
+    private static void updatePassword() {
+        // Implementation for updating user password
+        System.out.println("Updating password...");
+    }
+
+    private static void startExam() {
+        if (currentUser.hasTakenExam()) {
+            System.out.println("You have already taken the exam.");
+        } else {
+            System.out.println("Starting the exam...");
+            examSystem.displayQuestions();
+            examSystem.selectAnswers(currentUser);
+            examSystem.startTimer();
+            examSystem.autoSubmit(currentUser);
+            System.out.println("Exam submitted successfully.");
+        }
+    }
+
+    private static void closeSession() {
+        // Implementation for closing the current exam session
+        System.out.println("Closing the session...");
+    }
+
+    private static void displayMenu() {
+        System.out.println("\nMenu");
+        System.out.println("1. Update Profile");
+        System.out.println("2. Update Password");
+        System.out.println("3. Start Exam");
+        System.out.println("4. Close Session");
+        System.out.println("5. Logout");
+        System.out.print("Enter your choice: ");
+    }
+}
