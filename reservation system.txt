@@ -1,0 +1,85 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+class ReservationSystem {
+    private Map<String, String> loginCredentials;
+    private Map<String, String> reservations;
+
+    public ReservationSystem() {
+        loginCredentials = new HashMap<>();
+        reservations = new HashMap<>();
+    }
+
+    public void addUser(String username, String password) {
+        loginCredentials.put(username, password);
+        System.out.println("User added successfully!");
+    }
+
+    public boolean validateUser(String username, String password) {
+        return loginCredentials.containsKey(username) && loginCredentials.get(username).equals(password);
+    }
+
+    public void createReservation(String pnr, String details) {
+        reservations.put(pnr, details);
+        System.out.println("Reservation created successfully with PNR: " + pnr);
+    }
+
+    public void cancelReservation(String pnr) {
+        if (reservations.containsKey(pnr)) {
+            reservations.remove(pnr);
+            System.out.println("Reservation with PNR " + pnr + " canceled successfully.");
+        } else {
+            System.out.println("Reservation with PNR " + pnr + " does not exist.");
+        }
+    }
+
+    public void displayReservation(String pnr) {
+        if (reservations.containsKey(pnr)) {
+            System.out.println("Reservation details for PNR " + pnr + ": " + reservations.get(pnr));
+        } else {
+            System.out.println("Reservation with PNR " + pnr + " does not exist.");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ReservationSystem system = new ReservationSystem();
+
+        // Adding a sample user
+        system.addUser("user1", "password1");
+
+        // Login Form
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter username:");
+        String username = scanner.nextLine();
+        System.out.println("Enter password:");
+        String password = scanner.nextLine();
+
+        if (system.validateUser(username, password)) {
+            System.out.println("Login successful!");
+
+            // Reservation System
+            System.out.println("Enter PNR number:");
+            String pnr = scanner.nextLine();
+            System.out.println("Enter reservation details:");
+            String details = scanner.nextLine();
+            system.createReservation(pnr, details);
+
+            // Cancellation Form
+            System.out.println("Enter PNR number to cancel the reservation:");
+            String cancelPnr = scanner.nextLine();
+            system.displayReservation(cancelPnr);
+            System.out.println("Press OK to confirm cancellation:");
+            String confirm = scanner.nextLine();
+            if (confirm.equalsIgnoreCase("OK")) {
+                system.cancelReservation(cancelPnr);
+            }
+        } else {
+            System.out.println("Invalid username or password. Login failed.");
+        }
+
+        scanner.close();
+    }
+}
